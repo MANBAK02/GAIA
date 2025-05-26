@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory
 import pandas as pd
 import os
 
-app = Flask(__name__, static_folder="../frontend", static_url_path="")
+app = Flask(__name__)
 
 STUDENT_CSV = "./data/S.CSV"
 ANSWER_CSV = "./data/A.CSV"
@@ -15,7 +15,8 @@ correct_answers = answers_df["정답"].astype(int).tolist()
 
 @app.route("/")
 def serve_index():
-    return send_from_directory("../frontend", "index.html")
+    frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../frontend"))
+    return send_from_directory(frontend_path, "index.html")
 
 @app.route("/check_id", methods=["POST"])
 def check_id():
