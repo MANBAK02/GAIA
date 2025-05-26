@@ -7,11 +7,16 @@ app = Flask(__name__)
 STUDENT_CSV = "./data/S.CSV"
 ANSWER_CSV = "./data/A.CSV"
 
-students_df = pd.read_csv(STUDENT_CSV)
-answers_raw = pd.read_csv(ANSWER_CSV, header=None)
-answers_df = answers_raw.iloc[1:].copy()
-answers_df.columns = ["회차", "문제번호", "정답", "배점", "문제유형"]
-correct_answers = answers_df["정답"].astype(int).tolist()
+try:
+    students_df = pd.read_csv(STUDENT_CSV)
+    answers_raw = pd.read_csv(ANSWER_CSV, header=None)
+    answers_df = answers_raw.iloc[1:].copy()
+    answers_df.columns = ["회차", "문제번호", "정답", "배점", "문제유형"]
+    correct_answers = answers_df["정답"].astype(int).tolist()
+except Exception as e:
+    print("파일 로딩 실패:", e)
+    students_df = pd.DataFrame()
+    correct_answers = []
 
 @app.route("/")
 def serve_index():
